@@ -28,7 +28,7 @@ const PATTERNS_LAST_UPDATE_KEY = 'last-update';
 const GNOME_BACKGROUND_SCHEMA = 'org.gnome.desktop.background';
 const COLOURLOVERS_RANDOM_PATTERNS_URI = 'http://www.colourlovers.com/api/patterns/random?format=json';
 
-const DAY = 86400000;
+const HOUR = 3600000;
 
 const Patterns = new Lang.Class({
     Name: 'Patterns',
@@ -67,7 +67,7 @@ const Patterns = new Lang.Class({
                 this.getNextWallpaper();
             }
 
-        this.settings.set_int(PATTERNS_LAST_UPDATE_KEY, now);
+            this.settings.set_int(PATTERNS_LAST_UPDATE_KEY, now);
         }));
     },
 
@@ -83,8 +83,9 @@ const Patterns = new Lang.Class({
     },
 
     getNextWallpaper: function() {
-        this.timer = Mainloop.timeout_add(DAY, Lang.bind(this, function() {
-            this.downloadNewWallpaper();
+        this.timer = Mainloop.timeout_add(HOUR, Lang.bind(this, function() {
+            if (this.itsBeenADay())
+                this.downloadNewWallpaper();
         }));
     },
 
