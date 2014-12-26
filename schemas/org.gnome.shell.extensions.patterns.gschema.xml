@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="gnome-shell-extension-patterns">
+  <schema path="/org/gnome/shell/extensions/patterns/" id="org.gnome.shell.extensions.patterns">
+    <key type="i" name="last-update">
+      <default>0</default>
+      <summary>Last wallpaper update</summary>
+    </key>
+  </schema>
+</schemalist>
