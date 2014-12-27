@@ -62,12 +62,12 @@ const Patterns = new Lang.Class({
                     let path = GLib.build_filenamev([Me.dir.get_child('backgrounds').get_path(), now + ".png"]);
 
                     Convenience.downloadImageAsync(uri, path, this.setWallpaper.bind(this));
+
+                    this.settings.set_int(PATTERNS_LAST_UPDATE_KEY, now);
                 }
             } catch(e) {
                 this.getNextWallpaper();
             }
-
-            this.settings.set_int(PATTERNS_LAST_UPDATE_KEY, now);
         }));
     },
 
