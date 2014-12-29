@@ -24,19 +24,104 @@ const GLib = imports.gi.GLib;
 const Gtk = imports.gi.Gtk;
 const Lang = imports.lang;
 
+const PATTERNS_TYPE_KEY = 'patterns-type';
+const PATTERNS_FREQUENCY_KEY = 'patterns-frequency';
 
 const PatternsPrefs = new Lang.Class({
     Name: 'PatternsPrefs',
-    Extends: Gtk.Frame,
+    Extends: Gtk.Box,
 
     _init: function(params) {
         this.parent(params);
 
-        this.margin = 24;
+        this.loadSettings();
 
-        let clearCacheButton = new Gtk.Button({ label: 'Clear cached wallpapers' });
+        this.orientation = Gtk.Orientation.VERTICAL;
+
+        let builder = new Gtk.Builder();
+        builder.add_from_file(Me.dir.get_path() + "/preferences_dialog.ui");
+
+        let radioBox = builder.get_object('radio_boxes');
+        this.pack_start(radioBox, true, true, 0);
+
+        let patternTypes = [];
+        patternTypes[0] = builder.get_object('popular_button');
+        patternTypes[1] = builder.get_object('favorites_button');
+        patternTypes[2] = builder.get_object('random_button');
+
+        patternTypes.forEach(Lang.bind(this, function(button) {
+            button.connect('toggled', this._onPatternsChanged.bind(this));
+        }));
+
+        // make a getter and setter method checking if this.settings is set
+        let active = this.getPatternType();
+        patternTypes[active].active = true;
+
+        let frequencyModes = [];
+        frequencyModes[0] = builder.get_object('daily_button');
+        frequencyModes[1] = builder.get_object('weekly_button');
+        frequencyModes[2] = builder.get_object('never_button');
+
+        frequencyModes.forEach(Lang.bind(this, function(button) {
+            button.connect('toggled', this._onFrequencyChanged.bind(this));
+        }));
+
+        let active = this.getUpdateFrequency();
+        frequencyModes[active].active = true;
+
+        let privacyFrame = builder.get_object('privacy_frame');
+        this.pack_end(privacyFrame, true, true, 0);
+
+        let clearCacheButton = builder.get_object('clear_cache_button');
         clearCacheButton.connect('clicked', this.clearCachedWallpapers.bind(this));
-        this.add(clearCacheButton);
+    },
+
+    loadSettings: function() {
+        this.settings = Convenience.getSettings();
+    },
+
+    _onPatternsChanged: function(button) {
+        if (button.active) {
+            this.setPatternType(button.name);
+        }
+    },
+
+    getPatternType: function() {
+        if (!this.settings) {
+            this.loadSettings();
+        }
+
+        return this.settings.get_enum(PATTERNS_TYPE_KEY);
+    },
+
+    setPatternType: function(type) {
+        if (!this.settings) {
+            this.loadSettings();
+        }
+
+        this.settings.set_enum(PATTERNS_TYPE_KEY, type);
+    },
+
+    _onFrequencyChanged: function(button) {
+        if (button.active) {
+            this.setUpdateFrequency(button.name);
+        }
+    },
+
+    getUpdateFrequency: function() {
+        if (!this.settings) {
+            this.loadSettings();
+        }
+
+        return this.settings.get_enum(PATTERNS_FREQUENCY_KEY);
+    },
+
+    setUpdateFrequency: function(frequency) {
+        if (!this.settings) {
+            this.loadSettings();
+        }
+
+        this.settings.set_enum(PATTERNS_FREQUENCY_KEY, frequency);
     },
 
     clearCachedWallpapers: function() {
