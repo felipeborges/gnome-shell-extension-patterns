@@ -32,8 +32,8 @@ const COLOURLOVERS_POPULAR_PATTERNS_URI = 'http://www.colourlovers.com/api/patte
 const COLOURLOVERS_MAX_RESULTS = 20;
 
 const MILLISECONDS_HOUR = 3600000;
-const UNIX_DAY = 3600;
-const UNIX_WEEK = 25200;
+const UNIX_DAY = 86400;
+const UNIX_WEEK = 604800;
 
 let UpdateFrequency = {
     DAILY: 0,
