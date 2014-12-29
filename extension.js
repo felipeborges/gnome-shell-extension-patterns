@@ -89,23 +89,9 @@ const Patterns = new Lang.Class({
         }));
     },
 
-    clearCachedWallpapers: function() {
-        let base_path = Me.dir.get_child('backgrounds').get_path();
-        let bg_dir = Gio.file_new_for_path(base_path);
-        Convenience.listDirAsync(bg_dir, Lang.bind(this, function(files) {
-            files.forEach(function(file_info) {
-                let path = GLib.build_filenamev([base_path, file_info.get_name()]);
-                let file = Gio.file_new_for_path(path);
-                file.delete(null);
-            });
-        }));
-    },
-
     destroy: function() {
         if (this.timer)
             Mainloop.source_remove(this.timer);
-
-        this.clearCachedWallpapers();
     },
 });
 
