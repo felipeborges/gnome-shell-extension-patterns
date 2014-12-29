@@ -1,7 +1,9 @@
 Patterned Wallpapers
 ====================
 
-*Get a new patterned-wallpaper automatically every day.*
+*Get a new patterned-wallpaper automatically every day/week.*
+
+![Screenshot](https://raw.githubusercontent.com/felipeborges/gnome-shell-extension-patterns/master/Screenshot.png)
 
 gnome-shell-extension-patterns is a [GNOME Shell](https://wiki.gnome.org/Projects/GnomeShell) extension which automatically sets every day a new patterned-wallpaper created by the [COLOURlovers](http://www.colourlovers.com/) community.
 
