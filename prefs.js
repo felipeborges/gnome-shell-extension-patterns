@@ -46,7 +46,6 @@ const PatternsPrefs = new Lang.Class({
 
         let patternTypes = [];
         patternTypes[0] = builder.get_object('popular_button');
-        patternTypes[1] = builder.get_object('favorites_button');
         patternTypes[2] = builder.get_object('random_button');
 
         patternTypes.forEach(Lang.bind(this, function(button) {
@@ -58,7 +57,6 @@ const PatternsPrefs = new Lang.Class({
         let frequencyModes = [];
         frequencyModes[0] = builder.get_object('daily_button');
         frequencyModes[1] = builder.get_object('weekly_button');
-        frequencyModes[2] = builder.get_object('never_button');
 
         frequencyModes.forEach(Lang.bind(this, function(button) {
             button.connect('toggled', this._onFrequencyChanged.bind(this));
