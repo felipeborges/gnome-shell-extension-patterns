@@ -50,25 +50,29 @@ let PatternCollection = {
 const Patterns = new Lang.Class({
     Name: 'Patterns',
 
-    _init: function() {
-        this.loadSettings();
+    _settings: null,
 
+    _init: function() {
         if (this.canUpdateWallpaper()) {
             this.getWallpaper();
         }
     },
 
-    loadSettings: function() {
-        this.settings = Convenience.getSettings();
+    get settings () {
+        if (!this._settings) {
+            try {
+                this._settings = Convenience.getSettings();
+            } catch (err) {
+                log(err.message);
+            }
+        }
+
+        return this._settings;
     },
 
     canUpdateWallpaper: function() {
         let current_time = GLib.DateTime.new_now_local().to_unix();
         let last_update_time = this.settings.get_int(PATTERNS_LAST_UPDATE_KEY);
-
-        if (!this.settings) {
-            this.loadSettings();
-        }
 
         let update_frequency = this.settings.get_enum('patterns-frequency');
 
@@ -81,10 +85,6 @@ const Patterns = new Lang.Class({
     },
 
     getWallpaper: function() {
-        if (!this.settings) {
-            this.loadSettings();
-        }
-
         let collection = this.settings.get_enum('patterns-type');
         let rank = 0;
         if (collection === PatternCollection.POPULAR) {
