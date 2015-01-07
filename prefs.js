@@ -31,10 +31,10 @@ const PatternsPrefs = new Lang.Class({
     Name: 'PatternsPrefs',
     Extends: Gtk.Box,
 
+    _settings: null,
+
     _init: function(params) {
         this.parent(params);
-
-        this.loadSettings();
 
         this.orientation = Gtk.Orientation.VERTICAL;
 
@@ -53,9 +53,7 @@ const PatternsPrefs = new Lang.Class({
             button.connect('toggled', this._onPatternsChanged.bind(this));
         }));
 
-        // make a getter and setter method checking if this.settings is set
-        let active = this.getPatternType();
-        patternTypes[active].active = true;
+        patternTypes[this.pattern_type].active = true;
 
         let frequencyModes = [];
         frequencyModes[0] = builder.get_object('daily_button');
@@ -66,8 +64,7 @@ const PatternsPrefs = new Lang.Class({
             button.connect('toggled', this._onFrequencyChanged.bind(this));
         }));
 
-        let active = this.getUpdateFrequency();
-        frequencyModes[active].active = true;
+        frequencyModes[this.update_frequency].active = true;
 
         let privacyFrame = builder.get_object('privacy_frame');
         this.pack_end(privacyFrame, true, true, 0);
@@ -76,51 +73,43 @@ const PatternsPrefs = new Lang.Class({
         clearCacheButton.connect('clicked', this.clearCachedWallpapers.bind(this));
     },
 
-    loadSettings: function() {
-        this.settings = Convenience.getSettings();
+    get settings () {
+        if (!this._settings) {
+            try {
+                this._settings = Convenience.getSettings();
+            } catch(err) {
+               log(err.message);
+            }
+        }
+
+        return this._settings;
     },
 
     _onPatternsChanged: function(button) {
         if (button.active) {
-            this.setPatternType(button.name);
+            this.pattern_type = button.name;
         }
     },
 
-    getPatternType: function() {
-        if (!this.settings) {
-            this.loadSettings();
-        }
-
+    get pattern_type () {
         return this.settings.get_enum(PATTERNS_TYPE_KEY);
     },
 
-    setPatternType: function(type) {
-        if (!this.settings) {
-            this.loadSettings();
-        }
-
+    set pattern_type (type) {
         this.settings.set_enum(PATTERNS_TYPE_KEY, type);
     },
 
     _onFrequencyChanged: function(button) {
         if (button.active) {
-            this.setUpdateFrequency(button.name);
+            this.update_frequency = button.name;
         }
     },
 
-    getUpdateFrequency: function() {
-        if (!this.settings) {
-            this.loadSettings();
-        }
-
+    get update_frequency () {
         return this.settings.get_enum(PATTERNS_FREQUENCY_KEY);
     },
 
-    setUpdateFrequency: function(frequency) {
-        if (!this.settings) {
-            this.loadSettings();
-        }
-
+    set update_frequency (frequency) {
         this.settings.set_enum(PATTERNS_FREQUENCY_KEY, frequency);
     },
 
