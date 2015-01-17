@@ -140,8 +140,6 @@ const Patterns = new Lang.Class({
     },
 
     destroy: function() {
-        this.settings.set_int(PATTERNS_LAST_UPDATE_KEY, 0);
-
         if (this.timer)
             Mainloop.source_remove(this.timer);
     },
