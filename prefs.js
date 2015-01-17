@@ -19,10 +19,16 @@
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const Convenience = Me.imports.convenience;
+const Gettext = imports.gettext;
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
 const Gtk = imports.gi.Gtk;
 const Lang = imports.lang;
+
+Gettext.textdomain("gnome-shell-extension-patterns");
+Gettext.bindtextdomain("gnome-shell-extension-patterns", Me.dir.get_path() + "/locale");
+
+const _ = Gettext.gettext;
 
 const PATTERNS_TYPE_KEY = 'patterns-type';
 const PATTERNS_FREQUENCY_KEY = 'patterns-frequency';
