@@ -38,12 +38,10 @@ const UNIX_WEEK = 604800;
 let UpdateFrequency = {
     DAILY: 0,
     WEEKLY: 1,
-    NEVER: 2,
 };
 
 let PatternCollection = {
     POPULAR: 0,
-    FAVORITES: 1,
     RANDOM: 2,
 };
 
@@ -95,9 +93,6 @@ const Patterns = new Lang.Class({
                 rank = 0;
             }
             this.settings.set_int(PATTERNS_POPULAR_RANK_KEY, rank + 1);
-        } else if (collection === PatternCollection.FAVORITES) {
-            /* TODO: let users pin favorite wallpapers */
-            return;
         } else if (collection === PatternCollection.RANDOM) {
             this.downloadWallpaper(COLOURLOVERS_RANDOM_PATTERNS_URI, rank);
         }
@@ -145,8 +140,6 @@ const Patterns = new Lang.Class({
     },
 
     destroy: function() {
-        this.settings.set_int(PATTERNS_LAST_UPDATE_KEY, 0);
-
         if (this.timer)
             Mainloop.source_remove(this.timer);
     },

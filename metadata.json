@@ -3,5 +3,6 @@
     "uuid": "patterns@felipeborges.github.com",
     "name": "Patterned Wallpapers",
     "description": "Get a new patterned-wallpaper automatically every day/week.",
-    "settings-schema":"org.gnome.shell.extensions.patterns"
+    "settings-schema": "org.gnome.shell.extensions.patterns",
+    "url": "https://github.com/felipeborges/gnome-shell-extension-patterns"
 }

@@ -19,10 +19,16 @@
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const Convenience = Me.imports.convenience;
+const Gettext = imports.gettext;
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
 const Gtk = imports.gi.Gtk;
 const Lang = imports.lang;
+
+Gettext.textdomain("gnome-shell-extension-patterns");
+Gettext.bindtextdomain("gnome-shell-extension-patterns", Me.dir.get_path() + "/locale");
+
+const _ = Gettext.gettext;
 
 const PATTERNS_TYPE_KEY = 'patterns-type';
 const PATTERNS_FREQUENCY_KEY = 'patterns-frequency';
@@ -46,7 +52,6 @@ const PatternsPrefs = new Lang.Class({
 
         let patternTypes = [];
         patternTypes[0] = builder.get_object('popular_button');
-        patternTypes[1] = builder.get_object('favorites_button');
         patternTypes[2] = builder.get_object('random_button');
 
         patternTypes.forEach(Lang.bind(this, function(button) {
@@ -58,7 +63,6 @@ const PatternsPrefs = new Lang.Class({
         let frequencyModes = [];
         frequencyModes[0] = builder.get_object('daily_button');
         frequencyModes[1] = builder.get_object('weekly_button');
-        frequencyModes[2] = builder.get_object('never_button');
 
         frequencyModes.forEach(Lang.bind(this, function(button) {
             button.connect('toggled', this._onFrequencyChanged.bind(this));
