@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-17 11:17-0200\n"
 "PO-Revision-Date: 2015-01-18 16:00-0300\n"
-"Last-Translator: Mart Cigorraga <msx@archlinux.us>\n"
+"Last-Translator: Martín Cigorraga <msx@archlinux.us>\n"
 "Language-Team: Spanish <msx@archlinux.us>\n"
 "Language: es_AR\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr "<b>Patrones</b>"
 
 #: ../preferences_dialog.ui:38
 msgid "Most popular"
-msgstr "M populares"
+msgstr "Más populares"
 
 #: ../preferences_dialog.ui:55
 msgid "Surprise me!"
@@ -36,7 +36,7 @@ msgstr "<b>Frecuencia</b>"
 
 #: ../preferences_dialog.ui:111
 msgid "Every day"
-msgstr "Todos los ds"
+msgstr "Todos los días"
 
 #: ../preferences_dialog.ui:128
 msgid "Weekly"
