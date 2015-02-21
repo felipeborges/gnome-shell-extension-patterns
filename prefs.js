@@ -98,8 +98,8 @@ const PatternsPrefs = new Lang.Class({
         this._stack_switcher.set_stack(this);
 
         this.views = {
-            latest: new PatternsView("new", "Latest"),
-            popular: new PatternsView("top", "Popular"),
+            latest: new PatternsView("new", _("Latest")),
+            popular: new PatternsView("top", _("Popular")),
         };
         this._activeView = this.views.latest.title;
 
@@ -119,7 +119,7 @@ const PatternsPrefs = new Lang.Class({
         this._goBackButton.connect('clicked', this.setOverviewMode.bind(this));
 
         this._setWallpaperButton = new Gtk.Button({
-           label: "Set as Wallpaper",
+           label: _("Set as Wallpaper"),
         });
         this._setWallpaperButton.get_style_context().add_class("suggested-action");
         this._setWallpaperButton.connect('clicked', this.setWallpaper.bind(this));

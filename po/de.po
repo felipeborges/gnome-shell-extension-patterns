@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Patterned Wallpapers\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-17 12:02-0200\n"
+"POT-Creation-Date: 2015-02-21 15:05-0200\n"
 "PO-Revision-Date: 2015-01-18 15:31+0100\n"
 "Last-Translator: Jonatan Zeidler <jonatan_zeidler@gmx.de>\n"
 "Language-Team: GERMAN <jonatan_zeidler@gmx.de>\n"
@@ -18,34 +18,43 @@ msgstr ""
 "X-Generator: Poedit 1.5.4\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-#: preferences_dialog.ui:19
+#: prefs.js:101
+msgid "Latest"
+msgstr ""
+
+#: prefs.js:102
+#, fuzzy
+msgid "Popular"
+msgstr "Die beliebtesten"
+
+#: prefs.js:122
+#, fuzzy
+msgid "Set as Wallpaper"
+msgstr "Zwischengespeicherte Hintergründe löschen"
+
+#: preferences_dialog.ui:34
 msgid "<b>Patterns</b>"
 msgstr "<b>Muster</b>"
 
-#: preferences_dialog.ui:38
+#: preferences_dialog.ui:53
 msgid "Most popular"
 msgstr "Die beliebtesten"
 
-#: preferences_dialog.ui:55
+#: preferences_dialog.ui:70
 msgid "Surprise me!"
 msgstr "Überasche mich!"
 
-#: preferences_dialog.ui:92
+#: preferences_dialog.ui:107
 msgid "<b>Frequency</b>"
 msgstr "<b>Frequenz</b>"
 
-#: preferences_dialog.ui:111
+#: preferences_dialog.ui:126
 msgid "Every day"
 msgstr "Jeden Tag"
 
-#: preferences_dialog.ui:128
+#: preferences_dialog.ui:143
 msgid "Weekly"
 msgstr "wöchentlich"
 
-#: preferences_dialog.ui:165
-msgid "<b>Privacy</b>"
-msgstr "<b>Privatsphäre</b>"
-
-#: preferences_dialog.ui:178
-msgid "Clear cached wallpapers"
-msgstr "Zwischengespeicherte Hintergründe löschen"
+#~ msgid "<b>Privacy</b>"
+#~ msgstr "<b>Privatsphäre</b>"
