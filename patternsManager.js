@@ -34,27 +34,32 @@ const PatternsManager = new Lang.Class({
     _init: function(type) {
         this._items = [];
 
-        this.getWallpapers(COLOURLOVERS_PATTERNS_URI.replace("%type%", type));
+        this.getWallpapers(COLOURLOVERS_PATTERNS_URI, type);
     },
 
-    getWallpapers: function(url) {
-        let imageList = Gio.file_new_for_uri(url);
-        imageList.load_contents_async(null, Lang.bind(this, function(src, res) {
-            try {
-                let [success, contents] = imageList.load_contents_finish(res);
+    getWallpapers: function(base_url, type) {
+        let url = base_url.replace("%type%", type);
+        let path = GLib.build_filenamev([Me.dir.get_path(), type + "_cache.json"]);
 
-                if (success) {
-                    let json_obj = JSON.parse(contents);
-                    json_obj.forEach(Lang.bind(this, function(image) {
-                        this.downloadImage(image, Lang.bind(this, function() {
-                            this._items.push(image);
-                            this.emit('item-added', image);
+        Convenience.downloadImageAsync(url, path, Lang.bind(this, function() {
+            let imageList = Gio.file_new_for_path(path);
+            imageList.load_contents_async(null, Lang.bind(this, function(src, res) {
+                try {
+                    let [success, contents] = imageList.load_contents_finish(res);
+
+                    if (success) {
+                        let json_obj = JSON.parse(contents);
+                        json_obj.forEach(Lang.bind(this, function(image) {
+                            this.downloadImage(image, Lang.bind(this, function() {
+                                this._items.push(image);
+                                this.emit('item-added', image);
+                            }));
                         }));
-                    }));
+                    }
+                } catch(e) {
+                    log("Error obtaining list of images");
                 }
-            } catch(e) {
-                log("Error obtaining list of images");
-            }
+            }));
         }));
     },
 
