@@ -19,11 +19,14 @@
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const Convenience = Me.imports.convenience;
+const GdkPixbuf = imports.gi.GdkPixbuf;
 const Gettext = imports.gettext;
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
 const Gtk = imports.gi.Gtk;
 const Lang = imports.lang;
+const PatternsManager = Me.imports.patternsManager;
+const Signals = imports.signals;
 
 Gettext.textdomain("gnome-shell-extension-patterns");
 Gettext.bindtextdomain("gnome-shell-extension-patterns", Me.dir.get_path() + "/locale");
@@ -32,23 +35,111 @@ const _ = Gettext.gettext;
 
 const PATTERNS_TYPE_KEY = 'patterns-type';
 const PATTERNS_FREQUENCY_KEY = 'patterns-frequency';
+const GNOME_BACKGROUND_SCHEMA = 'org.gnome.desktop.background';
+
+const PatternsView = new Lang.Class({
+    Name: 'PatternsView',
+    Extends: Gtk.Stack,
+
+    _init: function(type, title) {
+        this.parent();
+
+        this.title = title;
+
+        let builder = new Gtk.Builder();
+        builder.add_from_file(Me.dir.get_path() + "/preferences_dialog.ui");
+
+        this.add(builder.get_object("scrolled_window"));
+
+        this._iconView = builder.get_object('iconview');
+        this.model = Gtk.ListStore.new([
+            GdkPixbuf.Pixbuf,
+        ]);
+
+        this._iconView.set_model(this.model);
+
+        this._manager = new PatternsManager.PatternsManager(type);
+        this._manager.connect('item-added', this.add_item.bind(this));
+        this._iconView.connect('item-activated', Lang.bind(this, function(source, item) {
+            let image = this._manager.getItem(item.to_string());
+            this.emit('item-activated', image);
+        }));
+    },
+
+    add_item: function(source, item) {
+        let image_path = Me.dir.get_path() + "/backgrounds/" + item.id + ".png";
+        try {
+            let pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(image_path, 192, 192);
+
+            let iter = this.model.append();
+            this.model.set(iter, [0], [pixbuf]);
+        } catch (e) {}
+    },
+});
+Signals.addSignalMethods(PatternsView.prototype);
 
 const PatternsPrefs = new Lang.Class({
     Name: 'PatternsPrefs',
-    Extends: Gtk.Box,
+    Extends: Gtk.Stack,
 
     _settings: null,
 
     _init: function(params) {
         this.parent(params);
 
-        this.orientation = Gtk.Orientation.VERTICAL;
+        this._bgBasePath = GLib.build_filenamev([
+            Me.dir.get_child('backgrounds').get_path(),
+            "<image_id>" + ".png"]);
+
+        // hack, see bg#743380
+        this.connect('realize', this._onRealize.bind(this));
+
+        this._stack_switcher = new Gtk.StackSwitcher();
+        this._stack_switcher.set_stack(this);
+
+        this.views = {
+            latest: new PatternsView("new", "Latest"),
+            popular: new PatternsView("top", "Popular"),
+        };
+        this._activeView = this.views.latest.title;
+
+        for (let i in this.views) {
+            this.add_titled(this.views[i], this.views[i].title, this.views[i].title);
+            this.views[i].connect('item-activated', this.openPreview.bind(this));
+        }
+
+        this._previewView = new Gtk.Stack();
+        this._previewView.show_all();
+
+        this._goBackButton = new Gtk.Button({
+            image: new Gtk.Image({
+                icon_name: "go-previous-symbolic",
+            })
+        });
+        this._goBackButton.connect('clicked', this.setOverviewMode.bind(this));
+
+        this._setWallpaperButton = new Gtk.Button({
+           label: "Set as Wallpaper",
+        });
+        this._setWallpaperButton.get_style_context().add_class("suggested-action");
+        this._setWallpaperButton.connect('clicked', this.setWallpaper.bind(this));
+
+        this._settingsButton = new Gtk.Button({
+            image: new Gtk.Image({
+                icon_name: "open-menu-symbolic",
+            })
+        });
+        this._settingsButton.connect('clicked', Lang.bind(this, function() {
+            this._settingsPopover.show_all();
+        }));
+
+        this._settingsPopover = new Gtk.Popover({
+            relative_to: this._settingsButton,
+        });
 
         let builder = new Gtk.Builder();
         builder.add_from_file(Me.dir.get_path() + "/preferences_dialog.ui");
-
-        let radioBox = builder.get_object('radio_boxes');
-        this.pack_start(radioBox, true, true, 0);
+        this._settingsPopover.add(builder.get_object('radio_boxes'));
 
         let patternTypes = [];
         patternTypes[0] = builder.get_object('popular_button');
@@ -69,12 +160,63 @@ const PatternsPrefs = new Lang.Class({
         }));
 
         frequencyModes[this.update_frequency].active = true;
+    },
 
-        let privacyFrame = builder.get_object('privacy_frame');
-        this.pack_end(privacyFrame, true, true, 0);
+    _onRealize: function() {
+        this.get_toplevel().set_size_request(917, 522);
+        this._headerbar = this.get_toplevel().get_header_bar();
+        this._headerbar.set_custom_title(this._stack_switcher);
+        this._headerbar.pack_end(this._settingsButton, false, false, 0);
+        this._headerbar.show_all();
 
-        let clearCacheButton = builder.get_object('clear_cache_button');
-        clearCacheButton.connect('clicked', this.clearCachedWallpapers.bind(this));
+        this.add_named(this._previewView, "preview");
+        this._headerbar.pack_start(this._goBackButton, false, false, 0);
+        this._headerbar.pack_end(this._setWallpaperButton, false, false, 0);
+    },
+
+    openPreview: function(source, image) {
+        this._activeView = this.get_visible_child_name();
+
+        this.setPreviewWallpaper(image.id);
+
+        this._headerbar.set_custom_title(null)
+        this._headerbar.set_title(image.title);
+        this.set_visible_child(this._previewView);
+        this._headerbar.show_all();
+
+        this._settingsButton.hide();
+    },
+
+    setPreviewWallpaper: function(image_id) {
+        let path = this._bgBasePath.replace('<image_id>', image_id);
+        this._provider = new Gtk.CssProvider();
+        this.get_toplevel().get_style_context().add_provider(this._provider, Gtk.STYLE_PROVIDER_PRIORITY_USER);
+        this._provider.load_from_data("GtkWindow { background-image: url('" + path + "'); }");
+
+        this._openedWallpaperId = image_id;
+    },
+
+    setOverviewMode: function() {
+        this._headerbar.set_custom_title(this._stack_switcher);
+        this.set_visible_child_name(this._activeView);
+
+        this._goBackButton.hide();
+        this._setWallpaperButton.hide();
+
+        this._settingsButton.show();
+
+        this._provider.load_from_data("GtkWindow { background: #FFF; }");
+    },
+
+    setWallpaper: function() {
+        let background_settings = new Gio.Settings({
+            schema_id: GNOME_BACKGROUND_SCHEMA
+        });
+
+        let path = this._bgBasePath.replace('<image_id>', this._openedWallpaperId);
+
+        background_settings.set_value('picture-uri', new GLib.Variant('s', path));
+        background_settings.set_value('picture-options', new GLib.Variant('s', 'wallpaper'));
     },
 
     get settings () {

@@ -2,15 +2,30 @@
 <!-- Generated with glade 3.18.3 -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
+  <object class="GtkScrolledWindow" id="scrolled_window">
+    <property name="visible">True</property>
+    <property name="expand">True</property>
+    <property name="can_focus">True</property>
+    <property name="vscrollbar_policy">GTK_POLICY_ALWAYS</property>
+    <child>
+      <object class="GtkIconView" id="iconview">
+        <property name="visible">True</property>
+        <property name="pixbuf_column">0</property>
+        <property name="item_width">120</property>
+        <property name="activate-on-single-click">True</property>
+      </object>
+    </child>
+  </object>
   <object class="GtkBox" id="radio_boxes">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="orientation">vertical</property>
     <child>
       <object class="GtkFrame" id="patterns_frame">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label_xalign">0</property>
-        <property name="margin">24</property>
+        <property name="margin">12</property>
         <property name="shadow_type">none</property>
         <child type="label">
           <object class="GtkLabel" id="patterns_label">
@@ -83,7 +98,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label_xalign">0</property>
-        <property name="margin">24</property>
+        <property name="margin">12</property>
         <property name="shadow_type">none</property>
         <child type="label">
           <object class="GtkLabel" id="frequency_label">
@@ -150,35 +165,6 @@
         <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
-    </child>
-  </object>
-  <object class="GtkFrame" id="privacy_frame">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="label_xalign">0</property>
-    <property name="margin">24</property>
-    <property name="shadow_type">none</property>
-    <child type="label">
-      <object class="GtkLabel" id="privacy_label">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes">&lt;b&gt;Privacy&lt;/b&gt;</property>
-        <property name="use_markup">True</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkAlignment" id="alignment3">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="top_padding">12</property>
-        <child>
-          <object class="GtkButton" id="clear_cache_button">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Clear cached wallpapers</property>
-          </object>
-        </child>
-      </object>
     </child>
   </object>
 </interface>
