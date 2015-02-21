@@ -12,12 +12,14 @@ It was enspired by the [Pattrn](https://play.google.com/store/apps/details?id=or
 Installation
 ============
 
+Visit https://extensions.gnome.org/extension/919/patterned-wallpapers/
+
+or
+
  1. Clone it into your *$HOME/.local/share/gnome-shell/extensions/* directory
  2. Enable it using **gnome-shell-extension-prefs** or **gnome-tweak-tool**
 
-**It will be uploaded to http://extensions.gnome.org as soon as some important features are implemented (see [issues](https://github.com/felipeborges/gnome-shell-extension-patterns/issues))**
-
-Licence
+License
 =======
 
 Copyright (C) 2015 Felipe Borges <felipeborges@gnome.org>
