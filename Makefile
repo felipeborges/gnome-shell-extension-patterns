@@ -5,6 +5,8 @@ DIST_FILES = \
 			 convenience.js \
 			 extension.js \
 			 metadata.json \
+			 patternsManager.js \
+			 patternsPopupMenu.js \
 			 preferences_dialog.ui \
 			 prefs.js \
 			 schemas/ \
