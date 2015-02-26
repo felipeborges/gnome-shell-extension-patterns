@@ -1,0 +1,63 @@
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# Aviary.pl
+# Jeśli masz jakiekolwiek uwagi odnoszące się do tłumaczenia lub chcesz
+# pomóc w jego rozwijaniu i pielęgnowaniu, napisz do nas:
+# gnomepl@aviary.pl
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# Piotr Drąg <piotrdrag@gmail.com>, 2015.
+# Aviary.pl <gnomepl@aviary.pl>, 2015.
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-shell-extension-patterns\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-02-21 15:05-0200\n"
+"PO-Revision-Date: 2015-02-26 19:40+0100\n"
+"Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
+"Language-Team: Polish <gnomepl@aviary.pl>\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+"X-Poedit-Language: Polish\n"
+"X-Poedit-Country: Poland\n"
+
+#: prefs.js:101
+msgid "Latest"
+msgstr "Najnowsze"
+
+#: prefs.js:102
+msgid "Popular"
+msgstr "Popularne"
+
+#: prefs.js:122
+msgid "Set as Wallpaper"
+msgstr "Ustaw jako tapetę"
+
+#: preferences_dialog.ui:34
+msgid "<b>Patterns</b>"
+msgstr "<b>Wzory</b>"
+
+#: preferences_dialog.ui:53
+msgid "Most popular"
+msgstr "Najpopularniejsze"
+
+#: preferences_dialog.ui:70
+msgid "Surprise me!"
+msgstr "Zaskocz mnie!"
+
+#: preferences_dialog.ui:107
+msgid "<b>Frequency</b>"
+msgstr "<b>Kiedy zmieniać</b>"
+
+#: preferences_dialog.ui:126
+msgid "Every day"
+msgstr "Codziennie"
+
+#: preferences_dialog.ui:143
+msgid "Weekly"
+msgstr "Co tydzień"
+
+msgid "Patterned Wallpapers"
+msgstr "Tapety we wzory"
