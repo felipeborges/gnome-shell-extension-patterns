@@ -49,7 +49,13 @@ const PatternsView = new Lang.Class({
         let builder = new Gtk.Builder();
         builder.add_from_file(Me.dir.get_path() + "/preferences_dialog.ui");
 
-        this.add(builder.get_object("scrolled_window"));
+        let loading_icon = new Gtk.Image({
+            file: Me.dir.get_path() + "/loading.gif",
+            expand: true,
+        });
+        this.add(loading_icon);
+
+        let scrolled_window = builder.get_object('scrolled_window');
 
         this._iconView = builder.get_object('iconview');
         this.model = Gtk.ListStore.new([
@@ -59,6 +65,10 @@ const PatternsView = new Lang.Class({
         this._iconView.set_model(this.model);
 
         this._manager = new PatternsManager.PatternsManager(type);
+        this._manager.connect('loading-done', Lang.bind(this, function() {
+            this.remove(loading_icon);
+            this.add(scrolled_window);
+        }));
         this._manager.connect('item-added', this.add_item.bind(this));
         this._iconView.connect('item-activated', Lang.bind(this, function(source, item) {
             let image = this._manager.getItem(item.to_string());

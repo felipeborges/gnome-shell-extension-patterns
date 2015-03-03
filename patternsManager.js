@@ -48,6 +48,7 @@ const PatternsManager = new Lang.Class({
                     let [success, contents] = imageList.load_contents_finish(res);
 
                     if (success) {
+                        this.emit('loading-done');
                         let json_obj = JSON.parse(contents);
                         json_obj.forEach(Lang.bind(this, function(image) {
                             this.downloadImage(image, Lang.bind(this, function() {
