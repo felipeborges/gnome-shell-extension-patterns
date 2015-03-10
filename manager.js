@@ -19,14 +19,12 @@
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const Convenience = Me.imports.convenience;
-const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
 const Lang = imports.lang;
 const Signals = imports.signals;
 
-const Mainloop = imports.mainloop;
-
 const COLOURLOVERS_PATTERNS_URI = 'http://www.colourlovers.com/api/patterns/%type%?format=json';
+const BASE_BG_PATH = Me.dir.get_child('backgrounds').get_path();
 
 const PatternsManager = new Lang.Class({
     Name: 'PatternsManager',
@@ -37,9 +35,13 @@ const PatternsManager = new Lang.Class({
         this.getWallpapers(COLOURLOVERS_PATTERNS_URI, type);
     },
 
+    buildPath: function(filename) {
+        return GLib.build_filenamev([BASE_BG_PATH, filename]);
+    },
+
     getWallpapers: function(base_url, type) {
         let url = base_url.replace("%type%", type);
-        let path = GLib.build_filenamev([Me.dir.get_path(), type + "_cache.json"]);
+        let path = this.buildPath(type + "_cache.json");
 
         Convenience.downloadFile(url, path, this.fetchPatternsIndex.bind(this));
     },
@@ -60,10 +62,9 @@ const PatternsManager = new Lang.Class({
     },
 
     downloadImage: function(image, callback) {
-        let path = GLib.build_filenamev([Me.dir.get_child('backgrounds').get_path(), image.id + ".png"]);
-        let file = Gio.File.new_for_path(path);
+        let path = this.buildPath(image.id + ".png");
 
-        if (!file.query_exists(null)) {
+        if (!Convenience.fileExists(path)) {
             Convenience.downloadFile(image.imageUrl, path, callback);
         } else {
             callback();

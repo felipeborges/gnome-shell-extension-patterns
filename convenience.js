@@ -150,6 +150,12 @@ function loadJsonFromPath(path, callback) {
     }));
 }
 
+function fileExists(path) {
+    let file = Gio.File.new_for_path(path);
+
+    return file.query_exists(null);
+}
+
 function listDirAsync(file, callback) {
     let allFiles = [];
     file.enumerate_children_async(Gio.FILE_ATTRIBUTE_STANDARD_NAME,
