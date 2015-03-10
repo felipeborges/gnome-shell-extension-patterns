@@ -25,7 +25,7 @@ const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
 const Gtk = imports.gi.Gtk;
 const Lang = imports.lang;
-const PatternsManager = Me.imports.patternsManager;
+const Manager = Me.imports.manager;
 const Signals = imports.signals;
 
 Gettext.textdomain("gnome-shell-extension-patterns");
@@ -64,7 +64,7 @@ const PatternsView = new Lang.Class({
 
         this._iconView.set_model(this.model);
 
-        this._manager = new PatternsManager.PatternsManager(type);
+        this._manager = new Manager.PatternsManager(type);
         this._manager.connect('loading-done', Lang.bind(this, function() {
             this.remove(loading_icon);
             this.add(scrolled_window);
