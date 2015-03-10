@@ -46,6 +46,8 @@ let PatternCollection = {
     RANDOM: 2,
 };
 
+const BASE_BG_PATH = Me.dir.get_child('backgrounds').get_path();
+
 const Patterns = new Lang.Class({
     Name: 'Patterns',
 
@@ -100,35 +102,37 @@ const Patterns = new Lang.Class({
     },
 
     downloadWallpaper: function(url, rank) {
-        let now = GLib.DateTime.new_now_local().to_unix();
-
-        let file = Gio.file_new_for_uri(url);
-        file.load_contents_async(null, Lang.bind(this, function(src, res) {
-            try {
-                let [success, contents] = file.load_contents_finish(res);
-
-                if (success) {
-                    let json_obj = JSON.parse(contents);
-                    let uri = json_obj[rank]['imageUrl'];
-                    let path = GLib.build_filenamev([Me.dir.get_child('backgrounds').get_path(), now + ".png"]);
-
-                    Convenience.downloadFile(uri, path, this.setWallpaper.bind(this));
-
-                    this.settings.set_int(PATTERNS_LAST_UPDATE_KEY, now);
-                }
-            } catch(e) {
+        let path = this.buildPath("bg.json");
+        Convenience.downloadFile(url, path, Lang.bind(this, function(res, path) {
+            if (!res) {
                 this.getNextWallpaper();
+                return;
             }
+
+            Convenience.loadJsonFromPath(path, Lang.bind(this, function(res, json_obj) {
+                let imageId = json_obj[rank]['id'];
+
+                Convenience.downloadFile(json_obj[rank]['imageUrl'],
+                                         this.buildPath(imageId + ".png"),
+                                         this.setWallpaper);
+
+                this.settings.set_int(PATTERNS_LAST_UPDATE_KEY,
+                                      GLib.DateTime.new_now_local().to_unix());
+            }));
         }));
     },
 
-    setWallpaper: function(path) {
-        let background_settings = new Gio.Settings({
+    buildPath: function(filename) {
+        return GLib.build_filenamev([BASE_BG_PATH, filename]);
+    },
+
+    setWallpaper: function(res, path) {
+        let bg_settings = new Gio.Settings({
             schema_id: GNOME_BACKGROUND_SCHEMA
         });
 
-        background_settings.set_value('picture-uri', new GLib.Variant('s', path));
-        background_settings.set_value('picture-options', new GLib.Variant('s', 'wallpaper'));
+        bg_settings.set_value('picture-uri', new GLib.Variant('s', path));
+        bg_settings.set_value('picture-options', new GLib.Variant('s', 'wallpaper'));
 
         this.getNextWallpaper();
     },
