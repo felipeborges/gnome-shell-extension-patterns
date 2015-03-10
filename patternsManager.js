@@ -41,25 +41,20 @@ const PatternsManager = new Lang.Class({
         let url = base_url.replace("%type%", type);
         let path = GLib.build_filenamev([Me.dir.get_path(), type + "_cache.json"]);
 
-        Convenience.downloadImageAsync(url, path, Lang.bind(this, function() {
-            let imageList = Gio.file_new_for_path(path);
-            imageList.load_contents_async(null, Lang.bind(this, function(src, res) {
-                try {
-                    let [success, contents] = imageList.load_contents_finish(res);
+        Convenience.downloadFile(url, path, this.fetchPatternsIndex.bind(this));
+    },
 
-                    if (success) {
-                        this.emit('loading-done');
-                        let json_obj = JSON.parse(contents);
-                        json_obj.forEach(Lang.bind(this, function(image) {
-                            this.downloadImage(image, Lang.bind(this, function() {
-                                this._items.push(image);
-                                this.emit('item-added', image);
-                            }));
-                        }));
-                    }
-                } catch(e) {
-                    log("Error obtaining list of images");
-                }
+    fetchPatternsIndex: function(success, path) {
+        if (!success)
+            return
+
+        this.emit('loading-done');
+        Convenience.loadJsonFromPath(path, Lang.bind(this, function(success, json_obj) {
+            json_obj.forEach(Lang.bind(this, function(image) {
+                this.downloadImage(image, Lang.bind(this, function() {
+                    this._items.push(image);
+                    this.emit('item-added', image);
+                }));
             }));
         }));
     },
@@ -69,7 +64,7 @@ const PatternsManager = new Lang.Class({
         let file = Gio.File.new_for_path(path);
 
         if (!file.query_exists(null)) {
-            Convenience.downloadImageAsync(image.imageUrl, path, callback);
+            Convenience.downloadFile(image.imageUrl, path, callback);
         } else {
             callback();
         }

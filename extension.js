@@ -112,7 +112,7 @@ const Patterns = new Lang.Class({
                     let uri = json_obj[rank]['imageUrl'];
                     let path = GLib.build_filenamev([Me.dir.get_child('backgrounds').get_path(), now + ".png"]);
 
-                    Convenience.downloadImageAsync(uri, path, this.setWallpaper.bind(this));
+                    Convenience.downloadFile(uri, path, this.setWallpaper.bind(this));
 
                     this.settings.set_int(PATTERNS_LAST_UPDATE_KEY, now);
                 }

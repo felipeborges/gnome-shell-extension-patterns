@@ -94,8 +94,8 @@ function getSettings(schema) {
 }
 
 /**
- * downloadImageAsync:
- * @url: the image url
+ * downloadFile:
+ * @url: file url
  * @path: the image local path
  * @callback: function called after the download is complete
  *
@@ -103,7 +103,7 @@ function getSettings(schema) {
  * calls the given callback passing the local image path as an argument.
  */
 
-function downloadImageAsync(url, path, callback) {
+function downloadFile(url, destination, callback) {
     let stream = Gio.file_new_for_uri(url);
 
     stream.read_async(GLib.PRIORITY_DEFAULT, null, Lang.bind(this, function(src, res) {
@@ -111,11 +111,11 @@ function downloadImageAsync(url, path, callback) {
         try {
             inputStream = stream.read_finish(res);
         } catch (e) {
-            callback(false);
+            callback(false, null);
             return;
         }
 
-        let out = Gio.file_new_for_path(path);
+        let out = Gio.file_new_for_path(destination);
         out.replace_async(null, false, Gio.FileCreateFlags.NONE, GLib.PRIORITY_DEFAULT, null,
             Lang.bind(this, function(src, res) {
                 let outputStream = out.replace_finish(res);
@@ -129,12 +129,26 @@ function downloadImageAsync(url, path, callback) {
                             return;
                         }
 
-                        callback(path);
+                        callback(true, destination);
                 }));
             }));
         }));
 }
 
+function loadJsonFromPath(path, callback) {
+    let file = Gio.file_new_for_path(path);
+    file.load_contents_async(null, Lang.bind(this, function(src, res) {
+        try {
+            let [success, contents] = file.load_contents_finish(res);
+
+            if (success) {
+                callback(true, JSON.parse(contents));
+            }
+        } catch(e) {
+            callback(false, null);
+        }
+    }));
+}
 
 function listDirAsync(file, callback) {
     let allFiles = [];
