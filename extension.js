@@ -39,6 +39,7 @@ const UNIX_WEEK = 604800;
 let UpdateFrequency = {
     DAILY: 0,
     WEEKLY: 1,
+    NEVER: 2,
 };
 
 let PatternCollection = {
