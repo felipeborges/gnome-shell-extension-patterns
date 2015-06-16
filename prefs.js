@@ -64,7 +64,11 @@ const PatternsView = new Lang.Class({
 
         this._iconView.set_model(this.model);
 
-        this._manager = new Manager.PatternsManager(type);
+        if (type === "favorites")
+            this._manager = new Manager.FavoritesManager();
+        else
+            this._manager = new Manager.PatternsManager(type);
+
         this._manager.connect('loading-done', Lang.bind(this, function() {
             this.remove(loading_icon);
             this.add(scrolled_window);
@@ -84,6 +88,10 @@ const PatternsView = new Lang.Class({
             let iter = this.model.append();
             this.model.set(iter, [0], [pixbuf]);
         } catch (e) {}
+    },
+
+    favoriteItem: function(item) {
+        this._manager.addItem(item);
     },
 });
 Signals.addSignalMethods(PatternsView.prototype);
@@ -110,6 +118,7 @@ const PatternsPrefs = new Lang.Class({
         this.views = {
             latest: new PatternsView("new", _("Latest")),
             popular: new PatternsView("top", _("Popular")),
+            favorites: new PatternsView("favorites", _("Favorites")),
         };
         this._activeView = this.views.latest.title;
 
@@ -127,6 +136,13 @@ const PatternsPrefs = new Lang.Class({
             })
         });
         this._goBackButton.connect('clicked', this.setOverviewMode.bind(this));
+
+        this._favoriteButton = new Gtk.ToggleButton({
+            image: new Gtk.Image({
+                icon_name: "non-starred-symbolic",
+            })
+        });
+        this._favoriteButton.connect('toggled', this.favoriteWallpaper.bind(this));
 
         this._setWallpaperButton = new Gtk.Button({
            label: _("Set as Wallpaper"),
@@ -176,6 +192,8 @@ const PatternsPrefs = new Lang.Class({
         }));
 
         frequencyModes[this.update_frequency].active = true;
+
+        this.get_toplevel().connect("destroy", this._onDestroy.bind(this));
     },
 
     _onRealize: function() {
@@ -187,13 +205,14 @@ const PatternsPrefs = new Lang.Class({
 
         this.add_named(this._previewView, "preview");
         this._headerbar.pack_start(this._goBackButton, false, false, 0);
+        this._headerbar.pack_end(this._favoriteButton, false, false, 0);
         this._headerbar.pack_end(this._setWallpaperButton, false, false, 0);
     },
 
     openPreview: function(source, image) {
         this._activeView = this.get_visible_child_name();
 
-        this.setPreviewWallpaper(image.id);
+        this.setPreviewWallpaper(image);
 
         this._headerbar.set_custom_title(null)
         this._headerbar.set_title(image.title);
@@ -203,13 +222,13 @@ const PatternsPrefs = new Lang.Class({
         this._settingsButton.hide();
     },
 
-    setPreviewWallpaper: function(image_id) {
-        let path = this._bgBasePath.replace('<image_id>', image_id);
+    setPreviewWallpaper: function(image) {
+        let path = this._bgBasePath.replace('<image_id>', image.id);
         this._provider = new Gtk.CssProvider();
         this.get_toplevel().get_style_context().add_provider(this._provider, Gtk.STYLE_PROVIDER_PRIORITY_USER);
         this._provider.load_from_data("GtkWindow { background-image: url('" + path + "'); }");
 
-        this._openedWallpaperId = image_id;
+        this._openedWallpaper = image;
     },
 
     setOverviewMode: function() {
@@ -217,6 +236,7 @@ const PatternsPrefs = new Lang.Class({
         this.set_visible_child_name(this._activeView);
 
         this._goBackButton.hide();
+        this._favoriteButton.hide();
         this._setWallpaperButton.hide();
 
         this._settingsButton.show();
@@ -224,12 +244,21 @@ const PatternsPrefs = new Lang.Class({
         this._provider.load_from_data("GtkWindow { background: #FFF; }");
     },
 
+    favoriteWallpaper: function() {
+        let active = this._favoriteButton.get_active();
+        if (active) {
+            this.views.favorites.favoriteItem(this._openedWallpaper);
+        } else {
+            // remove from favorites
+        }
+    },
+
     setWallpaper: function() {
         let background_settings = new Gio.Settings({
             schema_id: GNOME_BACKGROUND_SCHEMA
         });
 
-        let path = this._bgBasePath.replace('<image_id>', this._openedWallpaperId);
+        let path = this._bgBasePath.replace('<image_id>', this._openedWallpaper.id);
 
         background_settings.set_value('picture-uri', new GLib.Variant('s', path));
         background_settings.set_value('picture-options', new GLib.Variant('s', 'wallpaper'));
@@ -285,6 +314,12 @@ const PatternsPrefs = new Lang.Class({
                 file.delete(null);
             });
         }));
+    },
+
+    _onDestroy: function() {
+        this.views.favorites._manager.storeFavorites();
+
+        return true;
     },
 });
 

@@ -54,8 +54,7 @@ const PatternsManager = new Lang.Class({
         Convenience.loadJsonFromPath(path, Lang.bind(this, function(success, json_obj) {
             json_obj.forEach(Lang.bind(this, function(image) {
                 this.downloadImage(image, Lang.bind(this, function() {
-                    this._items.push(image);
-                    this.emit('item-added', image);
+                    this.addItem(image);
                 }));
             }));
         }));
@@ -71,6 +70,11 @@ const PatternsManager = new Lang.Class({
         }
     },
 
+    addItem: function(item) {
+        this._items.push(item);
+        this.emit('item-added', item);
+    },
+
     getItem: function(position) {
         let item = this._items[position];
 
@@ -82,3 +86,30 @@ const PatternsManager = new Lang.Class({
     },
 });
 Signals.addSignalMethods(PatternsManager.prototype);
+
+const FavoritesManager = new Lang.Class({
+    Name: 'FavoritesManager',
+    Extends: PatternsManager,
+
+    _init: function() {
+        this.parent();
+    },
+
+    /* override */
+    getWallpapers: function() {
+        let path = this.buildPath("favorites.json");
+        Convenience.loadJsonFromPath(path, Lang.bind(this, function(success, json_obj) {
+            if (!success)
+                return;
+
+            this.emit('loading-done');
+            json_obj.forEach(Lang.bind(this, function(image) {
+                this.addItem(image);
+            }));
+        }));
+    },
+
+    storeFavorites: function() {
+        GLib.file_set_contents(this.buildPath("favorites.json"), JSON.stringify(this._items));
+    },
+});
