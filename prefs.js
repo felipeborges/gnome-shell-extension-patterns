@@ -134,17 +134,22 @@ const PatternsPrefs = new Lang.Class({
         this._setWallpaperButton.get_style_context().add_class("suggested-action");
         this._setWallpaperButton.connect('clicked', this.setWallpaper.bind(this));
 
-        this._settingsButton = new Gtk.Button({
+        this._settingsButton = new Gtk.ToggleButton({
             image: new Gtk.Image({
                 icon_name: "open-menu-symbolic",
             })
         });
-        this._settingsButton.connect('clicked', Lang.bind(this, function() {
-            this._settingsPopover.show_all();
+        this._settingsButton.connect('toggled', Lang.bind(this, function() {
+            let active = this._settingsButton.get_active();
+            if (active)
+                this._settingsPopover.show_all();
+            else
+                this._settingsPopover.hide();
         }));
 
         this._settingsPopover = new Gtk.Popover({
             relative_to: this._settingsButton,
+            modal: false,
         });
 
         let builder = new Gtk.Builder();
