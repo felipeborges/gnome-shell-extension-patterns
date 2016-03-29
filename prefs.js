@@ -49,9 +49,8 @@ const PatternsView = new Lang.Class({
         let builder = new Gtk.Builder();
         builder.add_from_file(Me.dir.get_path() + "/preferences_dialog.ui");
 
-        let loading_icon = new Gtk.Image({
-            file: Me.dir.get_path() + "/loading.gif",
-            expand: true,
+        let loading_icon = new Gtk.Spinner({
+            active: true,
         });
         this.add(loading_icon);
 
