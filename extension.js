@@ -23,7 +23,6 @@ const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
 const Lang = imports.lang;
 const Mainloop = imports.mainloop;
-const PopupMenu = Me.imports.popupMenu;
 
 const PATTERNS_LAST_UPDATE_KEY = 'last-update';
 const PATTERNS_POPULAR_RANK_KEY = 'popular-rank';
@@ -157,13 +156,9 @@ function init() {
 }
 
 function enable() {
-    PopupMenu.patchMenu();
-
     patterns = new Patterns();
 }
 
 function disable() {
-    PopupMenu.unpatchMenu();
-
     patterns.destroy();
 }
