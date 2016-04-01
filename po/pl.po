@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gnome-shell-extension-patterns\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-02-21 15:05-0200\n"
-"PO-Revision-Date: 2015-02-26 19:40+0100\n"
+"PO-Revision-Date: 2015-08-23 12:27+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -61,3 +61,9 @@ msgstr "Co tydzień"
 
 msgid "Patterned Wallpapers"
 msgstr "Tapety we wzory"
+
+msgid "Next century"
+msgstr "Co sto lat"
+
+msgid "Favorites"
+msgstr "Ulubione"
