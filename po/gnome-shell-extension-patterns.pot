@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-21 15:05-0200\n"
+"POT-Creation-Date: 2016-07-23 18:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,15 +17,19 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: prefs.js:101
+#: prefs.js:118
 msgid "Latest"
 msgstr ""
 
-#: prefs.js:102
+#: prefs.js:119
 msgid "Popular"
 msgstr ""
 
-#: prefs.js:122
+#: prefs.js:120
+msgid "Favorites"
+msgstr ""
+
+#: prefs.js:147
 msgid "Set as Wallpaper"
 msgstr ""
 
@@ -33,22 +37,26 @@ msgstr ""
 msgid "<b>Patterns</b>"
 msgstr ""
 
-#: preferences_dialog.ui:53
+#: preferences_dialog.ui:52
 msgid "Most popular"
 msgstr ""
 
-#: preferences_dialog.ui:70
+#: preferences_dialog.ui:68
 msgid "Surprise me!"
 msgstr ""
 
-#: preferences_dialog.ui:107
+#: preferences_dialog.ui:104
 msgid "<b>Frequency</b>"
 msgstr ""
 
-#: preferences_dialog.ui:126
+#: preferences_dialog.ui:122
 msgid "Every day"
 msgstr ""
 
-#: preferences_dialog.ui:143
+#: preferences_dialog.ui:138
 msgid "Weekly"
+msgstr ""
+
+#: preferences_dialog.ui:154
+msgid "Next century"
 msgstr ""
