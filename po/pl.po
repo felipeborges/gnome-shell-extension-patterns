@@ -1,37 +1,37 @@
-# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-# Aviary.pl
-# Jeśli masz jakiekolwiek uwagi odnoszące się do tłumaczenia lub chcesz
-# pomóc w jego rozwijaniu i pielęgnowaniu, napisz do nas:
-# gnomepl@aviary.pl
-# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-# Piotr Drąg <piotrdrag@gmail.com>, 2015.
-# Aviary.pl <gnomepl@aviary.pl>, 2015.
+# Polish translation for gnome-shell-extension-patterns.
+# Copyright © 2015-2016 the gnome-shell-extension-patterns authors.
+# This file is distributed under the same license as the gnome-shell-extension-patterns package.
+# Piotr Drąg <piotrdrag@gmail.com>, 2015-2016.
+# Aviary.pl <community-poland@mozilla.org>, 2015-2016.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-shell-extension-patterns\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-21 15:05-0200\n"
-"PO-Revision-Date: 2015-02-26 19:40+0100\n"
+"POT-Creation-Date: 2016-07-23 18:35+0200\n"
+"PO-Revision-Date: 2016-07-23 18:37+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
-"Language-Team: Polish <gnomepl@aviary.pl>\n"
+"Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Poedit-Language: Polish\n"
-"X-Poedit-Country: Poland\n"
 
-#: prefs.js:101
+#: prefs.js:118
 msgid "Latest"
 msgstr "Najnowsze"
 
-#: prefs.js:102
+#: prefs.js:119
 msgid "Popular"
 msgstr "Popularne"
 
-#: prefs.js:122
+#: prefs.js:120
+msgid "Favorites"
+msgstr "Ulubione"
+
+#: prefs.js:147
 msgid "Set as Wallpaper"
 msgstr "Ustaw jako tapetę"
 
@@ -39,25 +39,32 @@ msgstr "Ustaw jako tapetę"
 msgid "<b>Patterns</b>"
 msgstr "<b>Wzory</b>"
 
-#: preferences_dialog.ui:53
+#: preferences_dialog.ui:52
 msgid "Most popular"
 msgstr "Najpopularniejsze"
 
-#: preferences_dialog.ui:70
+#: preferences_dialog.ui:68
 msgid "Surprise me!"
 msgstr "Zaskocz mnie!"
 
-#: preferences_dialog.ui:107
+#: preferences_dialog.ui:104
 msgid "<b>Frequency</b>"
 msgstr "<b>Kiedy zmieniać</b>"
 
-#: preferences_dialog.ui:126
+#: preferences_dialog.ui:122
 msgid "Every day"
 msgstr "Codziennie"
 
-#: preferences_dialog.ui:143
+#: preferences_dialog.ui:138
 msgid "Weekly"
 msgstr "Co tydzień"
 
+#: preferences_dialog.ui:154
+msgid "Next century"
+msgstr "Co sto lat"
+
 msgid "Patterned Wallpapers"
 msgstr "Tapety we wzory"
+
+msgid "Get a new patterned-wallpaper automatically every day/week."
+msgstr "Codziennie lub co tydzień nowa tapeta we wzory."
